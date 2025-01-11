@@ -1,12 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.v1.api import api_router
-from app.core.config import settings
 
 app = FastAPI(
     title="Game of Thrones Championship API",
     description="API for managing the Sword Fighting Championship",
-    version="1.0.0"
+    version="1.0.0",
 )
 
 # CORS middleware configuration
@@ -21,10 +20,11 @@ app.add_middleware(
 # Include API router
 app.include_router(api_router, prefix="/api/v1")
 
+
 @app.get("/")
 async def root():
     return {
         "message": "Game of Thrones Championship API",
         "docs_url": "/docs",
-        "version": "1.0.0"
+        "version": "1.0.0",
     }
