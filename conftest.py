@@ -5,15 +5,16 @@ from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 import asyncpg
 
-from app.main import app
-from app.core.config import settings
+from backend.app.main import app
+from backend.app.core.config import settings
 from db.interface import DatabaseInterface
 from db.session import get_db
 from db.models.base import Base
 
 # Test database settings
 TEST_POSTGRES_DB = "got_championship_test"
-TEST_DATABASE_URL = f"postgresql+asyncpg://{settings.POSTGRES_USER}:{settings.POSTGRES_PASSWORD}@{settings.POSTGRES_SERVER}:{settings.POSTGRES_PORT}/{TEST_POSTGRES_DB}"
+TEST_POSTGRES_PORT = "5433"
+TEST_DATABASE_URL = f"postgresql+asyncpg://{settings.POSTGRES_USER}:{settings.POSTGRES_PASSWORD}@{settings.POSTGRES_SERVER}:{TEST_POSTGRES_PORT}/{TEST_POSTGRES_DB}"
 
 # Create test database interface
 test_db = DatabaseInterface(TEST_DATABASE_URL)
@@ -34,7 +35,7 @@ async def create_test_database() -> None:
         user=settings.POSTGRES_USER,
         password=settings.POSTGRES_PASSWORD,
         host=settings.POSTGRES_SERVER,
-        port=int(settings.POSTGRES_PORT),
+        port=int(TEST_POSTGRES_PORT),  # Use test port
     )
     try:
         await sys_conn.execute(f'CREATE DATABASE "{TEST_POSTGRES_DB}"')
