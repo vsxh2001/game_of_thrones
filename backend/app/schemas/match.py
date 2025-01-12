@@ -1,46 +1,44 @@
 from pydantic import BaseModel, Field
 from datetime import datetime
-from typing import List, Optional
-from enum import Enum
-
-
-class MatchStatus(str, Enum):
-    SCHEDULED = "scheduled"
-    IN_PROGRESS = "in_progress"
-    COMPLETED = "completed"
-
-
-class MatchTeam(BaseModel):
-    team_id: int
-    score: int = Field(default=0, ge=0)
+from typing import Optional, List
+from db.models.matches import MatchStatus
+from .team import TeamWithScore
 
 
 class MatchBase(BaseModel):
     season_id: int
-    start_time: datetime
 
 
 class MatchCreate(MatchBase):
-    teams: List[int] = Field(min_items=2)
+    team_ids: List[int] = Field(..., min_items=2, max_items=2)
+    start_time: Optional[datetime] = None
 
 
 class MatchUpdate(BaseModel):
-    status: Optional[MatchStatus] = None
     start_time: Optional[datetime] = None
     end_time: Optional[datetime] = None
+    status: Optional[MatchStatus] = None
 
 
-class MatchTeamResponse(MatchTeam):
-    team_name: str
-    team_color: str
+class MatchTeamScore(BaseModel):
+    team_id: int
+    score: int = 0
+
+    class Config:
+        from_attributes = True
 
 
 class MatchResponse(MatchBase):
     id: int
     status: MatchStatus
+    start_time: Optional[datetime] = None
     end_time: Optional[datetime] = None
-    teams: List[MatchTeamResponse]
     created_at: datetime
+    teams: List[TeamWithScore] = []
 
     class Config:
         from_attributes = True
+
+
+class MatchScoreUpdate(BaseModel):
+    team_scores: List[MatchTeamScore] = Field(..., min_items=2, max_items=2)
