@@ -20,5 +20,8 @@ class Team(Base):
     # Relationships
     season = relationship("Season", back_populates="teams")
     matches = relationship("Match", secondary="match_teams", back_populates="teams")
+    round_scores = relationship("RoundScore", back_populates="team")
+    cube_takeovers = relationship("CubeTakeover", back_populates="team")
+    cube_keepalives = relationship("CubeKeepalive", back_populates="team")
 
     __table_args__ = (CheckConstraint("total_score >= 0", name="positive_score"),)

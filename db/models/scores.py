@@ -18,7 +18,7 @@ class RoundScore(Base):
 
     # Relationships
     round = relationship("Round", back_populates="scores")
-    team = relationship("Team")
+    team = relationship("Team", back_populates="round_scores")
 
     __table_args__ = (
         UniqueConstraint(
