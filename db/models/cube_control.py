@@ -18,9 +18,9 @@ class CubeTakeover(Base):
     )
 
     # Relationships
-    round = relationship("Round")
+    round = relationship("Round", back_populates="takeovers")
     cube = relationship("Cube", back_populates="takeovers")
-    team = relationship("Team")
+    team = relationship("Team", back_populates="cube_takeovers")
 
 
 class CubeKeepalive(Base):
@@ -36,6 +36,6 @@ class CubeKeepalive(Base):
     )
 
     # Relationships
-    round = relationship("Round")
+    round = relationship("Round", back_populates="keepalives")
     cube = relationship("Cube", back_populates="keepalives")
-    team = relationship("Team")
+    team = relationship("Team", back_populates="cube_keepalives")

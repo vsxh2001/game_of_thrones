@@ -34,3 +34,5 @@ class Round(Base):
     match = relationship("Match", back_populates="rounds")
     cubes = relationship("Cube", back_populates="round")
     scores = relationship("RoundScore", back_populates="round")
+    takeovers = relationship("CubeTakeover", back_populates="round")
+    keepalives = relationship("CubeKeepalive", back_populates="round")
