@@ -2,9 +2,11 @@ name: Tests
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - '**'  # Run on all branches
   pull_request:
-    branches: [ main ]
+    branches:
+      - master  # Only for PRs targeting master
 
 jobs:
   test:
