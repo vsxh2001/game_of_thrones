@@ -3,7 +3,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from typing import List, Optional
 from datetime import datetime
-from app.schemas.match import MatchCreate, MatchResponse, MatchUpdate, MatchStatus
+from backend.app.schemas.match import (
+    MatchCreate,
+    MatchResponse,
+    MatchUpdate,
+    MatchStatus,
+)
 from db.session import get_db
 from db.models.matches import Match, MatchStatus as DBMatchStatus
 from db.models.seasons import Season, SeasonStatus

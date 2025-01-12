@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from typing import List
-from app.schemas.cube import CubeCreate, CubeResponse, CubeUpdate
+from backend.app.schemas.cube import CubeCreate, CubeResponse, CubeUpdate
 from db.session import get_db
 from db.models.cubes import Cube
 from db.models.rounds import Round, RoundStatus

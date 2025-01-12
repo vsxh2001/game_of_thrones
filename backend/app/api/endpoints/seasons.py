@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from app.schemas.season import SeasonCreate, SeasonResponse
+from backend.app.schemas.season import SeasonCreate, SeasonResponse
 from db.session import get_db
 from db.models.seasons import Season, SeasonStatus
 from typing import List
