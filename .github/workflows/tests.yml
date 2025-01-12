@@ -41,7 +41,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        uv pip sync
+        uv sync
         uv pip install pytest pytest-asyncio pytest-cov
 
     - name: Run tests
