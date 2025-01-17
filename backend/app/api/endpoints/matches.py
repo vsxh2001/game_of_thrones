@@ -17,7 +17,7 @@ from db.models.teams import Team
 router = APIRouter()
 
 
-@router.post("/", response_model=MatchResponse)
+@router.post("/", response_model=MatchResponse, status_code=201)
 async def create_match(match: MatchCreate, db: AsyncSession = Depends(get_db)):
     """Create a new match"""
     # Check if season exists and is in correct state
@@ -33,25 +33,12 @@ async def create_match(match: MatchCreate, db: AsyncSession = Depends(get_db)):
             detail="Matches can only be created in upcoming or active seasons",
         )
 
-    # Validate teams exist and belong to the season
-    teams_query = select(Team).where(
-        Team.id.in_(match.teams), Team.season_id == match.season_id
-    )
-    result = await db.execute(teams_query)
-    teams = result.scalars().all()
-
-    if len(teams) != 2:
-        raise HTTPException(
-            status_code=400,
-            detail="Both teams must exist and belong to the specified season",
-        )
-
     # Create match
     db_match = Match(
+        name=match.name,
         season_id=match.season_id,
         start_time=match.start_time,
-        status=DBMatchStatus.SCHEDULED,
-        teams=teams,
+        status=match.status,
     )
     db.add(db_match)
     await db.commit()
@@ -94,7 +81,7 @@ async def get_match(match_id: int, db: AsyncSession = Depends(get_db)):
     return match
 
 
-@router.put("/{match_id}", response_model=MatchResponse)
+@router.patch("/{match_id}", response_model=MatchResponse)
 async def update_match(
     match_id: int, match_update: MatchUpdate, db: AsyncSession = Depends(get_db)
 ):
@@ -107,7 +94,7 @@ async def update_match(
         raise HTTPException(status_code=404, detail="Match not found")
 
     # Update match
-    for field, value in match_update.dict(exclude_unset=True).items():
+    for field, value in match_update.model_dump(exclude_unset=True).items():
         setattr(match, field, value)
 
     await db.commit()
