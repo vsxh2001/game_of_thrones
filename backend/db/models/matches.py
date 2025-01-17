@@ -6,6 +6,8 @@ from sqlalchemy import (
     Enum,
     CheckConstraint,
     Table,
+    String,
+    UniqueConstraint,
 )
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
@@ -39,6 +41,7 @@ class Match(Base):
     __tablename__ = "matches"
 
     id = Column(Integer, primary_key=True)
+    name = Column(String(100), nullable=False)
     season_id = Column(Integer, ForeignKey("seasons.id"), nullable=False)
     start_time = Column(DateTime, nullable=True)
     end_time = Column(DateTime, nullable=True)
@@ -51,7 +54,12 @@ class Match(Base):
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
 
+    __table_args__ = (
+        UniqueConstraint("season_id", "name", name="unique_season_match"),
+    )
+
     # Relationships
     season = relationship("Season", back_populates="matches")
     teams = relationship("Team", secondary=match_teams, back_populates="matches")
     rounds = relationship("Round", back_populates="match")
+    cubes = relationship("Cube", back_populates="match")

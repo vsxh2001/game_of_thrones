@@ -1,4 +1,12 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, CheckConstraint
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    DateTime,
+    ForeignKey,
+    CheckConstraint,
+    UniqueConstraint,
+)
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 
@@ -24,4 +32,7 @@ class Team(Base):
     cube_takeovers = relationship("CubeTakeover", back_populates="team")
     cube_keepalives = relationship("CubeKeepalive", back_populates="team")
 
-    __table_args__ = (CheckConstraint("total_score >= 0", name="positive_score"),)
+    __table_args__ = (
+        CheckConstraint("total_score >= 0", name="positive_score"),
+        UniqueConstraint("season_id", "name", name="unique_season_team"),
+    )

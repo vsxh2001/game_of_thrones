@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, DateTime, ForeignKey, UniqueConstraint
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 
@@ -15,6 +15,12 @@ class CubeTakeover(Base):
     takeover_time = Column(DateTime, nullable=False)
     created_at = Column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
+    __table_args__ = (
+        UniqueConstraint(
+            "round_id", "cube_id", "team_id", name="unique_round_cube_team"
+        ),
     )
 
     # Relationships

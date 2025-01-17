@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, DateTime, ForeignKey, Enum
+from sqlalchemy import Column, Integer, DateTime, ForeignKey, Enum, UniqueConstraint
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 import enum
@@ -30,9 +30,13 @@ class Round(Base):
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
 
+    __table_args__ = (
+        UniqueConstraint("match_id", "round_number", name="unique_match_round_number"),
+    )
+
     # Relationships
     match = relationship("Match", back_populates="rounds")
-    cubes = relationship("Cube", back_populates="round")
     scores = relationship("RoundScore", back_populates="round")
     takeovers = relationship("CubeTakeover", back_populates="round")
     keepalives = relationship("CubeKeepalive", back_populates="round")
+    cube_configs = relationship("CubeConfig", back_populates="round")

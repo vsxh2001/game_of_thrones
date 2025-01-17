@@ -65,5 +65,5 @@ class SeasonScore(Base):
     team = relationship("Team")
 
     __table_args__ = (
-        UniqueConstraint("season_id", "team_id", name="unique_season_team"),
+        UniqueConstraint("season_id", "team_id", name="unique_season_team_score"),
     )
