@@ -5,8 +5,8 @@ from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 import asyncpg
 
-from backend.app.main import app
-from backend.app.core.config import settings
+from app.main import app
+from app.core.config import settings
 from db.interface import DatabaseInterface
 from db.session import get_db
 from db.models.base import Base

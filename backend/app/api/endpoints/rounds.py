@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from typing import List
-from backend.app.schemas.round import RoundCreate, RoundResponse, RoundUpdate
+from app.schemas.round import RoundCreate, RoundResponse, RoundUpdate
 from db.session import get_db
 from db.models.rounds import Round, RoundStatus
 from db.models.matches import Match, MatchStatus

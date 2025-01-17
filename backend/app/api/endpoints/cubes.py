@@ -2,31 +2,27 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from typing import List
-from backend.app.schemas.cube import CubeCreate, CubeResponse, CubeUpdate
+from app.schemas.cube import CubeCreate, CubeResponse, CubeUpdate
 from db.session import get_db
 from db.models.cubes import Cube
-from db.models.rounds import Round, RoundStatus
+from db.models.matches import Match
 
 router = APIRouter()
 
 
-@router.post("/", response_model=CubeResponse)
+@router.post("/", response_model=CubeResponse, status_code=201)
 async def create_cube(cube: CubeCreate, db: AsyncSession = Depends(get_db)):
     """Create a new cube"""
-    # Check if round exists and is active
-    round_query = select(Round).where(Round.id == cube.round_id)
-    round = await db.execute(round_query)
-    round = round.scalar_one_or_none()
+    # Check if match exists and is active
+    match_query = select(Match).where(Match.id == cube.match_id)
+    match_ = await db.execute(match_query)
+    match_ = match_.scalar_one_or_none()
 
-    if not round:
-        raise HTTPException(status_code=404, detail="Round not found")
-    if round.status != RoundStatus.ACTIVE:
-        raise HTTPException(
-            status_code=400, detail="Cubes can only be created in active rounds"
-        )
+    if not match_:
+        raise HTTPException(status_code=404, detail="Match not found")
 
     # Create cube
-    db_cube = Cube(round_id=cube.round_id, points=cube.points)
+    db_cube = Cube(match_id=cube.match_id, name=cube.name)
     db.add(db_cube)
     await db.commit()
     await db.refresh(db_cube)

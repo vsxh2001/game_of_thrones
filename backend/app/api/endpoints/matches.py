@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from typing import List, Optional
 from datetime import datetime
-from backend.app.schemas.match import (
+from app.schemas.match import (
     MatchCreate,
     MatchResponse,
     MatchUpdate,

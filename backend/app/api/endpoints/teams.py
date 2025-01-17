@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 from typing import List
 from sqlalchemy import select
-from backend.app.schemas.team import TeamCreate, TeamResponse
+from app.schemas.team import TeamCreate, TeamResponse
 from db.session import get_db
 from sqlalchemy.ext.asyncio import AsyncSession
 from db.models.teams import Team

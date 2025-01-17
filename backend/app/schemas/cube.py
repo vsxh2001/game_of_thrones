@@ -1,11 +1,11 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from datetime import datetime
 from typing import Optional
 
 
 class CubeBase(BaseModel):
-    round_id: int
-    points: int
+    name: str = Field(..., min_length=1, max_length=100)
+    match_id: int
 
 
 class CubeCreate(CubeBase):
@@ -13,7 +13,7 @@ class CubeCreate(CubeBase):
 
 
 class CubeUpdate(BaseModel):
-    points: Optional[int] = None
+    name: Optional[str] = None
 
 
 class CubeResponse(CubeBase):

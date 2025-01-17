@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from backend.app.api.endpoints import seasons, teams, matches, rounds, cubes
+from app.api.endpoints import seasons, teams, matches, rounds, cubes
 
 api_router = APIRouter()
 
