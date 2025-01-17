@@ -2,7 +2,6 @@ from pydantic import BaseModel, Field
 from datetime import datetime
 from typing import Optional, List
 from db.models.matches import MatchStatus
-from .team import TeamWithScore
 
 
 class MatchBase(BaseModel):
@@ -10,8 +9,9 @@ class MatchBase(BaseModel):
 
 
 class MatchCreate(MatchBase):
-    team_ids: List[int] = Field(..., min_items=2, max_items=2)
+    name: str = Field(..., min_length=1, max_length=100)
     start_time: Optional[datetime] = None
+    status: MatchStatus = Field(default=MatchStatus.SCHEDULED)
 
 
 class MatchUpdate(BaseModel):
@@ -30,11 +30,11 @@ class MatchTeamScore(BaseModel):
 
 class MatchResponse(MatchBase):
     id: int
+    name: str
     status: MatchStatus
     start_time: Optional[datetime] = None
     end_time: Optional[datetime] = None
     created_at: datetime
-    teams: List[TeamWithScore] = []
 
     class Config:
         from_attributes = True
